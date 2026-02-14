@@ -1,35 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react';
+import { Flex, Layout } from 'antd';
+import SysNavBar from "@/components/SysNavBar";
 
-function App() {
-  const [count, setCount] = useState(0)
+const { Header, Sider, Content } = Layout;
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+const headerStyle: React.CSSProperties = {
+  textAlign: 'center',
+  color: '#fff',
+  height: 64,
+  paddingInline: 48,
+  lineHeight: '64px',
+  backgroundColor: '#4096ff',
+};
 
-export default App
+const contentStyle: React.CSSProperties = {
+  textAlign: 'center',
+  minHeight: 120,
+  lineHeight: '120px',
+  color: '#fff',
+  backgroundColor: '#0958d9',
+};
+
+
+const App: React.FC = () => (
+  <Flex gap="middle" wrap className={'w-full h-full'}>
+    <Layout className={'w-full h-full'}>
+      <Sider width="256px">
+        <SysNavBar />
+      </Sider>
+      <Layout>
+        <Header style={headerStyle}>Header</Header>
+        <Content style={contentStyle}>Content</Content>
+      </Layout>
+    </Layout>
+  </Flex>
+);
+
+export default App;
