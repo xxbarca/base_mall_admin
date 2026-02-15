@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
-import {getPageCategory} from "@/api/category.ts";
+import {deleteCategory, getPageCategory} from "@/api/category.ts";
 import type {CategoryItem} from "@/api/interface/category.ts";
-import {Button, Space, Table, type TableProps, Tag} from "antd";
+import {Button, message, Space, Table, type TableProps, Tag} from "antd";
 import {DeleteButton} from "@/components/DeleteButton";
 import type {ReqPage} from "@/api/interface/base.ts";
 import {AdvancedForm, type ItemProps} from "@/components/AdvancedForm";
@@ -10,7 +10,7 @@ export const Category = () => {
   const [cateList, setCateList] = useState<Array<CategoryItem>>([]);
   const [params, setParams] = useState<ReqPage & Partial<CategoryItem>>({
     pageNo: 1,
-    pageSize: 5
+    pageSize: 10
   });
 
   const columns: TableProps<CategoryItem>['columns'] = [
@@ -43,7 +43,12 @@ export const Category = () => {
     }
   ]
   const deleteAction = (record: CategoryItem) => {
-    console.log(record);
+    deleteCategory(record.id).then(async res => {
+      if (res.code === 200) {
+        await message.success('删除成功', 0.5)
+        fetchCategoryList()
+      }
+    })
   }
   const onFinish = (record: Partial<CategoryItem>) => {
     const p = {...params, ...record}

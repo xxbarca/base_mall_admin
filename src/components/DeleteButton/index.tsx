@@ -24,8 +24,9 @@ export const DeleteButton = (props: IProps) => {
     description={description}
     okText={okText}
     cancelText={cancelText}
+    onConfirm={okAction}
     icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
   >
-    <Button onClick={okAction} danger size={'small'}>{label}</Button>
+    <Button danger size={'small'}>{label}</Button>
   </Popconfirm>
 }

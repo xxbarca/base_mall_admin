@@ -67,7 +67,7 @@ export const PUT = (url: string, data?: object) => {
   return request.put(url, data)
 }
 
-export const DELETE = (url: string) => {
+export const DELETE = <T>(url: string): Promise<T> => {
   return request.delete(url)
 }
 
