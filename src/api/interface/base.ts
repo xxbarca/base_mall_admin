@@ -3,6 +3,12 @@ export interface Result {
   message: string | string[];
 }
 
+// * 分页请求参数
+export interface ReqPage {
+  pageNo: number;
+  pageSize: number;
+}
+
 export interface PageMetaData {
   pageNo: number;
   pageSize: number;

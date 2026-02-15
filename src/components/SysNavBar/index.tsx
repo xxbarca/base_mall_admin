@@ -54,10 +54,9 @@ const SysNavBar: React.FC = () => {
   const navigate = useNavigate()
   useEffect(() => {
     const menus = generateMenu(routes)
-    console.log(menus)
     setItems(menus)
   }, []);
-  const onTitleClick = ({key, keyPath}) => {
+  const onTitleClick = ({key}) => {
     setKey(key)
     navigate(key)
   }

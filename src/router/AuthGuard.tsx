@@ -54,7 +54,7 @@ export const AuthGuard = () => {
     const routeMap = createRouteMap(routes)
     const meta = getRouteMeta(location.pathname, routeMap)
   }, []);
-  return <div className={'w-full h-full bg-gray-50'}>
+  return <div className={'w-full h-full xxx'}>
     <Outlet />
   </div>
 }
