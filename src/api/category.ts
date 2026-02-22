@@ -14,7 +14,7 @@ export const createCategory = (data: CategoryItem) => {
   return POST<Result>(`/category`, data)
 }
 
-export const updateCategory = (data: CategoryItem) => {
+export const updateCategory = (data: Partial<CategoryItem>) => {
   return PATCH<Result>(`/category`, data)
 }
 

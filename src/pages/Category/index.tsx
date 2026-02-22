@@ -70,7 +70,7 @@ export const Category = () => {
         } else if (title === '确认') {
           const params = {
             ...value,
-            online: value.online ? ONLINE.ON : ONLINE.OFF
+            online: value?.online ? ONLINE.ON : ONLINE.OFF
           }
           updateCategory({...params, id: record.id}).then(res => {
             const {code} = res
