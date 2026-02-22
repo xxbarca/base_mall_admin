@@ -1,10 +1,13 @@
 import {useEffect, useState} from "react";
-import {deleteCategory, getPageCategory} from "@/api/category.ts";
+import {deleteCategory, getPageCategory, updateCategory} from "@/api/category.ts";
 import type {CategoryItem} from "@/api/interface/category.ts";
-import {Button, message, Space, Table, type TableProps, Tag} from "antd";
+import {Button, message, Space, type TableProps, Tag} from "antd";
 import {DeleteButton} from "@/components/DeleteButton";
 import type {ReqPage} from "@/api/interface/base.ts";
 import {AdvancedForm, type ItemProps} from "@/components/AdvancedForm";
+import {AdvancedTable} from "@/components/AdvancedTable";
+import {AlertModal} from "@/store/useGlobalModalStore.tsx";
+import {EditAdd} from "@/pages/Category/components/EditAdd.tsx";
 
 export const Category = () => {
   const [cateList, setCateList] = useState<Array<CategoryItem>>([]);
@@ -18,7 +21,7 @@ export const Category = () => {
     {title: '创建时间', dataIndex: 'create_time', key: 'create_time', align: 'center'},
     {title: '更新时间', dataIndex: 'update_time', key: 'update_time', align: 'center'},
     {title: '描述', dataIndex: 'description', key: 'description', align: 'center'},
-    {title: '是否在线', dataIndex: 'online', key: 'online', align: 'center',
+    {title: '状态', dataIndex: 'online', key: 'online', align: 'center',
       render: (text) => <span>
         {Number(text) === 1 ? <Tag color={'blue'}>在线</Tag> : <Tag color={'red'}>下线</Tag>}
       </span>,
@@ -28,7 +31,7 @@ export const Category = () => {
     {title: '操作', key: 'action', align: 'center',
       render: (_, record) => (
         <Space>
-          <Button type={'primary'} size={'small'}>编辑</Button>
+          <Button type={'primary'} size={'small'} onClick={() => editAdd(record)}>编辑</Button>
           <DeleteButton okAction={() => deleteAction(record)}/>
         </Space>
       )
@@ -47,6 +50,24 @@ export const Category = () => {
       if (res.code === 200) {
         await message.success('删除成功', 0.5)
         fetchCategoryList()
+      }
+    })
+  }
+  const editAdd = (record) => {
+    AlertModal({
+      title: '编辑分类',
+      content: EditAdd,
+      buttons: [{
+        title: '确认',
+        type: 'primary',
+      }, '取消'],
+      callback: ({value}) => {
+        updateCategory({...value, id: record.id}).then(res => {
+          const {code} = res
+          if (code === 200) {
+            message.success('更新成功', 0.5)
+          }
+        })
       }
     })
   }
@@ -69,6 +90,6 @@ export const Category = () => {
   }, []);
   return <div className={'w-full h-full box-border flex flex-col'}>
     <AdvancedForm<Partial<CategoryItem>> onFinish={onFinish} items={items}/>
-    <Table className={'h-full'} size={'middle'} columns={columns} dataSource={cateList} bordered/>
+    <AdvancedTable columns={columns} cateList={cateList} />
   </div>
 }

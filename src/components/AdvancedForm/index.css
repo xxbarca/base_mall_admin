@@ -1,0 +1,18 @@
+.ant-col {
+}
+
+.form {
+  /*padding: 10px;*/
+  /*box-sizing: border-box;*/
+}
+/* 统一设置所有 Form.Item 的底部间距 */
+.form .ant-form-item {
+  margin-bottom: 0 !important; /* 自定义间距大小，默认是 24px，可改为 16px/32px 等 */
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* 可以单独给最后一个表单项（如按钮）取消间距 */
+.form .ant-form-item:last-child {
+  margin-bottom: 0;
+}

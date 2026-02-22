@@ -1,10 +1,12 @@
 import {Outlet} from "react-router";
 import type {AppRouteObject, RouteMeta} from "@/router/router.tsx";
-import {useEffect} from "react";
 import {routes} from "@/router/routes.tsx";
-import type {MenuItem} from "@/components/SysNavBar";
+import type {MenuProps} from "antd";
 
-export const generateMenu = (routeList: AppRouteObject[] = routes, parent: null): MenuItem[] => {
+export type MenuItem = Required<MenuProps>['items'][number];
+
+
+export const generateMenu = (routeList: AppRouteObject[] = routes, parent: AppRouteObject | null = null): MenuItem[] => {
   return routeList
     .filter(route => !route.meta?.hideInMenu && route.name)
     .sort((a, b) => (a.meta?.order || 0) - (b.meta?.order || 0))
@@ -14,6 +16,7 @@ export const generateMenu = (routeList: AppRouteObject[] = routes, parent: null)
       icon: route.meta?.icon,
       label: route.meta?.title || route.name,
       children: route.children ? generateMenu(route.children, route) : undefined,
+      parent: parent
     }))
 }
 
@@ -50,11 +53,11 @@ const getRouteMeta = (
 }
 
 export const AuthGuard = () => {
-  useEffect(() => {
-    const routeMap = createRouteMap(routes)
-    const meta = getRouteMeta(location.pathname, routeMap)
-  }, []);
-  return <div className={'w-full h-full xxx'}>
+  // useEffect(() => {
+  //   const routeMap = createRouteMap(routes)
+  //   const meta = getRouteMeta(location.pathname, routeMap)
+  // }, []);
+  return <div className={'w-full h-full'}>
     <Outlet />
   </div>
 }

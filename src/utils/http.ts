@@ -47,7 +47,7 @@ request.interceptors.response.use(
     } else {
 
 
-      return Promise.reject(new Error(res.message || '请求失败'))
+      return Promise.reject(new Error('请求失败'))
     }
   },
   error => {
@@ -71,6 +71,6 @@ export const DELETE = <T>(url: string): Promise<T> => {
   return request.delete(url)
 }
 
-export const PATCH = (url: string, data?: object) => {
+export const PATCH = <T>(url: string, data?: object): Promise<T> => {
   return request.patch(url, data)
 }

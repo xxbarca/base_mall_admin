@@ -20,7 +20,7 @@ const L: React.FC = () => {
         <SysNavBar />
       </Sider>
       <Layout>
-        <Content style={contentStyle} className={'box-border p-2.5 bg-white'}>
+        <Content style={contentStyle} className={'box-border p-2.5 bg-blend-lighten'}>
           <Outlet />
         </Content>
       </Layout>
