@@ -55,7 +55,7 @@ request.interceptors.response.use(
   }
 )
 
-export const GET = (url: string, params?: object) => {
+export const GET = <T>(url: string, params?: object): Promise<T> => {
   return request.get(url, params)
 }
 

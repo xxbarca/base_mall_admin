@@ -1,9 +1,13 @@
 import {AdvancedForm, type ItemProps} from "@/components/AdvancedForm";
-import {forwardRef, useImperativeHandle, useRef} from "react";
+import {forwardRef, useEffect, useImperativeHandle, useRef, useState} from "react";
 import {ONLINE} from "@/utils/constants.ts";
+import {useGlobalModalStore} from "@/store/useGlobalModalStore.tsx";
+import {getCategory} from "@/api/category.ts";
 
 export const EditAdd = forwardRef((_props, ref) => {
   const r = useRef(null)
+  const [data, setData] = useState()
+  const {modalConfig} = useGlobalModalStore()
   const columns: Array<ItemProps> = [{
     label: '名称',
     name: 'name',
@@ -24,5 +28,25 @@ export const EditAdd = forwardRef((_props, ref) => {
     defaultValue: 10
   }]
   useImperativeHandle(ref, () => r.current)
-  return <AdvancedForm ref={r} searchAble={false} addAble={false} direction={'vertical'} items={columns} />
+  useEffect(() => {
+    if (modalConfig) {
+      const {props} = modalConfig
+      if (props && props.id) {
+        getCategory(props.id).then(res => {
+          const {code, data} = res
+          if (code === 200) {
+            setData(data)
+          }
+        })
+      }
+    }
+  }, [modalConfig, setData])
+  return <AdvancedForm
+    data={data}
+    ref={r}
+    searchAble={false}
+    addAble={false}
+    direction={'vertical'}
+    items={columns}
+  />
 })

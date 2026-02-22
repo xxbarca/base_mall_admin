@@ -6,10 +6,12 @@ import {DeleteButton} from "@/components/DeleteButton";
 import type {ReqPage} from "@/api/interface/base.ts";
 import {AdvancedForm, type ItemProps} from "@/components/AdvancedForm";
 import {AdvancedTable} from "@/components/AdvancedTable";
-import {AlertModal} from "@/store/useGlobalModalStore.tsx";
+import {AlertModal, useGlobalModalStore} from "@/store/useGlobalModalStore.tsx";
 import {EditAdd} from "@/pages/Category/components/EditAdd.tsx";
+import {ONLINE} from "@/utils/constants.ts";
 
 export const Category = () => {
+  const {updateModalVisible} = useGlobalModalStore()
   const [cateList, setCateList] = useState<Array<CategoryItem>>([]);
   const [params, setParams] = useState<ReqPage & Partial<CategoryItem>>({
     pageNo: 1,
@@ -23,7 +25,7 @@ export const Category = () => {
     {title: '描述', dataIndex: 'description', key: 'description', align: 'center'},
     {title: '状态', dataIndex: 'online', key: 'online', align: 'center',
       render: (text) => <span>
-        {Number(text) === 1 ? <Tag color={'blue'}>在线</Tag> : <Tag color={'red'}>下线</Tag>}
+        {text === ONLINE.ON ? <Tag color={'blue'}>在线</Tag> : <Tag color={'red'}>下线</Tag>}
       </span>,
     },
     {title: '图片', dataIndex: 'img', key: 'img', align: 'center'},
@@ -53,21 +55,32 @@ export const Category = () => {
       }
     })
   }
-  const editAdd = (record) => {
+  const editAdd = (record: CategoryItem) => {
     AlertModal({
       title: '编辑分类',
       content: EditAdd,
+      props: {id: record.id},
       buttons: [{
         title: '确认',
         type: 'primary',
       }, '取消'],
-      callback: ({value}) => {
-        updateCategory({...value, id: record.id}).then(res => {
-          const {code} = res
-          if (code === 200) {
-            message.success('更新成功', 0.5)
+      callback: ({title, value}) => {
+        if (title === '取消') {
+          updateModalVisible(false)
+        } else if (title === '确认') {
+          const params = {
+            ...value,
+            online: value.online ? ONLINE.ON : ONLINE.OFF
           }
-        })
+          updateCategory({...params, id: record.id}).then(res => {
+            const {code} = res
+            if (code === 200) {
+              message.success('更新成功', 0.5)
+              fetchCategoryList()
+              updateModalVisible(false)
+            }
+          })
+        }
       }
     })
   }

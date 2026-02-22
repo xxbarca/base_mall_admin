@@ -23,11 +23,12 @@ interface IProps<T> {
   searchAble?: boolean;
   addAble?: boolean;
   direction?: 'vertical' | 'horizontal';
+  data?: Record<string, never>
 }
 
 
 export const AdvancedForm = forwardRef(<T = object>(props: IProps<T>, ref: React.Ref<HTMLElement>) => {
-  const {onFinish, items, searchAble = true, addAble = true, direction} = props
+  const {onFinish, items, searchAble = true, addAble = true, direction, data} = props
   const [form] = Form.useForm();
   const renderFormItem = (item: ItemProps) => {
     switch (item.type) {
@@ -62,13 +63,17 @@ export const AdvancedForm = forwardRef(<T = object>(props: IProps<T>, ref: React
 
   useEffect(() => {
     items.forEach(i => {
-      form.setFieldValue(i.name, i.defaultValue)
+      if (i.type === 'SWITCH') {
+        const v = data ? data[i.name] : i.defaultValue
+        form.setFieldValue(i.name, v === '1')
+      } else {
+        form.setFieldValue(i.name, data ? data[i.name] : i.defaultValue)
+      }
     })
-  }, []);
+  }, [data, form, items]);
 
 
 
-  // @ts-ignore
   useImperativeHandle(ref, () => {
     return {
       getFieldsValue: () => {

@@ -19,6 +19,7 @@ type ModalConfig = {
   buttons: Array<string | ButtonProps>
   callback?: (p: CBProps) => void
   width: string
+  props?: object
 }
 
 

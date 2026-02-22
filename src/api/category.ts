@@ -1,4 +1,4 @@
-import {DELETE, PATCH, POST} from "@/utils/http.ts";
+import {DELETE, GET, PATCH, POST} from "@/utils/http.ts";
 import type {PageResultData, Result} from "@/api/interface/base.ts";
 import type {CategoryItem} from "@/api/interface/category.ts";
 
@@ -16,4 +16,8 @@ export const createCategory = (data: CategoryItem) => {
 
 export const updateCategory = (data: CategoryItem) => {
   return PATCH<Result>(`/category`, data)
+}
+
+export const getCategory = (id: string) => {
+  return GET<Result>(`/category/${id}`)
 }
