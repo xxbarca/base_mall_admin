@@ -1,5 +1,6 @@
 import React, {forwardRef, useEffect, useImperativeHandle} from "react";
 import {Button, Col, Form, Input, InputNumber, Row, Select, Space, Switch} from "antd";
+import type {FormRule} from 'antd';
 const {TextArea} = Input
 import './index.css'
 
@@ -15,6 +16,7 @@ export interface ItemProps {
   checkedChildren?: string;
   unCheckedChildren?: string
   defaultValue?: string | number | boolean;
+  rules?: Array<FormRule>;
 }
 
 interface IProps<T> {
@@ -24,11 +26,12 @@ interface IProps<T> {
   addAble?: boolean;
   direction?: 'vertical' | 'horizontal';
   data?: Record<string, never>
+  add: () => void
 }
 
 
 export const AdvancedForm = forwardRef(<T = object>(props: IProps<T>, ref: React.Ref<HTMLElement>) => {
-  const {onFinish, items, searchAble = true, addAble = true, direction, data} = props
+  const {onFinish, items, searchAble = true, addAble = true, direction, data, add} = props
   const [form] = Form.useForm();
   const renderFormItem = (item: ItemProps) => {
     switch (item.type) {
@@ -78,6 +81,9 @@ export const AdvancedForm = forwardRef(<T = object>(props: IProps<T>, ref: React
     return {
       getFieldsValue: () => {
         return form.getFieldsValue()
+      },
+      validateFields: () => {
+        return form.validateFields()
       }
     };
   });
@@ -87,7 +93,7 @@ export const AdvancedForm = forwardRef(<T = object>(props: IProps<T>, ref: React
       <Row gutter={10}>
         {items.map(item => {
           return <Col span={direction === 'vertical' ? 24 : 6}>
-            <Form.Item label={item.label} name={item.name} style={{marginBottom: '10px'}}>
+            <Form.Item label={item.label} name={item.name} style={{marginBottom: '10px'}} rules={item.rules}>
               {renderFormItem(item)}
             </Form.Item>
           </Col>
@@ -96,7 +102,7 @@ export const AdvancedForm = forwardRef(<T = object>(props: IProps<T>, ref: React
           <Form.Item label={null} className={'flex justify-start'}>
             <Space>
               {searchAble && <Button type="primary" htmlType="submit">搜索</Button>}
-              {addAble && <Button type="primary" htmlType="submit">新增</Button>}
+              {addAble && <Button type="primary" onClick={add}>新增</Button>}
             </Space>
           </Form.Item>
         </Col>

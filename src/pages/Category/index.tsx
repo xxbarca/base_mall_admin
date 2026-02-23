@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {deleteCategory, getPageCategory, updateCategory} from "@/api/category.ts";
+import {createCategory, deleteCategory, getPageCategory, updateCategory} from "@/api/category.ts";
 import type {CategoryItem} from "@/api/interface/category.ts";
 import {Button, message, Space, type TableProps, Tag} from "antd";
 import {DeleteButton} from "@/components/DeleteButton";
@@ -55,11 +55,11 @@ export const Category = () => {
       }
     })
   }
-  const editAdd = (record: CategoryItem) => {
+  const editAdd = (record?: CategoryItem) => {
     AlertModal({
-      title: '编辑分类',
+      title: record?.id ? '编辑分类' : '新增分类',
       content: EditAdd,
-      props: {id: record.id},
+      props: {id: record?.id},
       buttons: [{
         title: '确认',
         type: 'primary',
@@ -72,12 +72,17 @@ export const Category = () => {
             ...value,
             online: value?.online ? ONLINE.ON : ONLINE.OFF
           }
-          updateCategory({...params, id: record.id}).then(res => {
+          if (record?.id) {
+            params.id = record.id
+          }
+          ;(record?.id ? updateCategory(params) : createCategory(params)).then(res => {
             const {code} = res
             if (code === 200) {
-              message.success('更新成功', 0.5)
+              message.success(record?.id ? '更新成功' : '创建成功', 0.5)
               fetchCategoryList()
               updateModalVisible(false)
+            } else {
+              message.warning(res.message[0])
             }
           })
         }
@@ -102,7 +107,7 @@ export const Category = () => {
     fetchCategoryList()
   }, []);
   return <div className={'w-full h-full box-border flex flex-col'}>
-    <AdvancedForm<Partial<CategoryItem>> onFinish={onFinish} items={items}/>
+    <AdvancedForm<Partial<CategoryItem>> onFinish={onFinish} items={items} add={editAdd}/>
     <AdvancedTable columns={columns} cateList={cateList} />
   </div>
 }

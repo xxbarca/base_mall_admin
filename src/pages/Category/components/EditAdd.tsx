@@ -11,7 +11,8 @@ export const EditAdd = forwardRef((_props, ref) => {
   const columns: Array<ItemProps> = [{
     label: '名称',
     name: 'name',
-    type: 'INPUT'
+    type: 'INPUT',
+    rules: [{required: true, message: '分类名不能为空'}]
   }, {
     label: '描述',
     name: 'description',
@@ -20,7 +21,7 @@ export const EditAdd = forwardRef((_props, ref) => {
     label: '状态',
     name: 'online',
     type: 'SWITCH',
-    defaultValue: ONLINE.OFF
+    defaultValue: ONLINE.ON
   }, {
     label: '排序',
     name: 'index',

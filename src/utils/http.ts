@@ -1,4 +1,5 @@
 import axios from "axios";
+import {message} from "antd";
 
 const request = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -51,6 +52,9 @@ request.interceptors.response.use(
     }
   },
   error => {
+    const {response} = error
+    const {data} = response
+    message.warning(data.message[0])
     return Promise.reject(error)
   }
 )
