@@ -31,7 +31,7 @@ export type AppRouteObject = RouteObject & {
 }
 
 // export type MenuItem = {
-//   key: string
+//   Key: string
 //   icon: React.ReactNode
 //   label?: string
 //   children: AppRouteObject[] | undefined

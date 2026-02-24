@@ -17,6 +17,14 @@ export interface PageMetaData {
   total: number;
 }
 
+export const defaultPageMetaData: PageMetaData = {
+  pageNo: 1,
+  pageSize: 10,
+  total: 0,
+  totalPages: 0,
+  itemCount: 0,
+}
+
 export interface PageResultData<T> extends Result {
   data: {
     items: Array<T>;

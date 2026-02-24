@@ -4,3 +4,6 @@ html, body, #root {
   height: 100%;
 }
 
+.page-container {
+  @apply w-full h-full box-border flex flex-col;
+}

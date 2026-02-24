@@ -11,7 +11,7 @@ export const generateMenu = (routeList: AppRouteObject[] = routes, parent: AppRo
     .filter(route => !route.meta?.hideInMenu && route.name)
     .sort((a, b) => (a.meta?.order || 0) - (b.meta?.order || 0))
     .map(route => ({
-      // key: route.path || route.name || '',
+      // Key: route.path || route.name || '',
       key: parent ? parent.path + '/' + route.path : route.path,
       icon: route.meta?.icon,
       label: route.meta?.title || route.name,

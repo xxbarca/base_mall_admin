@@ -9,7 +9,9 @@ import {ArticleList} from "@/pages/ArticleList";
 import {ArticleEdit} from "@/pages/ArticleEdit";
 import {Settings} from '@/pages/Settings'
 import {Category} from "@/pages/Category";
-import {ChartBarStacked, Dot} from "lucide-react";
+import {ChartBarStacked, CircleSmallIcon, PaperclipIcon} from "lucide-react";
+import {SpecKey} from "@/pages/Spec/Key";
+import {SpecValue} from "@/pages/Spec/Value";
 
 export const routes: AppRouteObject[] = [
   {
@@ -18,7 +20,7 @@ export const routes: AppRouteObject[] = [
     meta: {
       title: "分类管理",
       requiresAuth: true,
-      icon: <ChartBarStacked />,
+      icon: <ChartBarStacked size={15} />,
     },
     children: [
       {
@@ -27,7 +29,36 @@ export const routes: AppRouteObject[] = [
         element: <Category />,
         meta: {
           title: '分类列表',
-          icon: <Dot />
+          icon: <CircleSmallIcon size={14} />
+        }
+      }
+    ]
+  },
+  {
+    path: '/spec',
+    name: 'spec',
+    meta: {
+      title: '规格管理',
+      requiresAuth: true,
+      icon: <PaperclipIcon size={15}/>
+    },
+    children: [
+      {
+        path: 'key',
+        name: 'keyList',
+        element: <SpecKey />,
+        meta: {
+          title: '规格名列表',
+          icon: <CircleSmallIcon size={14} />
+        }
+      },
+      {
+        path: 'value',
+        name: 'valueList',
+        element: <SpecValue />,
+        meta: {
+          title: '规格值列表',
+          icon: <CircleSmallIcon size={14} />
         }
       }
     ]

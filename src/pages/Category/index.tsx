@@ -3,7 +3,7 @@ import {createCategory, deleteCategory, getPageCategory, updateCategory} from "@
 import type {CategoryItem} from "@/api/interface/category.ts";
 import {Button, message, Space, type TableProps, Tag} from "antd";
 import {DeleteButton} from "@/components/DeleteButton";
-import type {ReqPage} from "@/api/interface/base.ts";
+import {defaultPageMetaData, type PageMetaData, type ReqPage} from "@/api/interface/base.ts";
 import {AdvancedForm, type ItemProps} from "@/components/AdvancedForm";
 import {AdvancedTable} from "@/components/AdvancedTable";
 import {AlertModal, useGlobalModalStore} from "@/store/useGlobalModalStore.tsx";
@@ -17,12 +17,13 @@ export const Category = () => {
     pageNo: 1,
     pageSize: 10
   });
+  const [meta, setMeta] = useState<PageMetaData>(defaultPageMetaData)
 
   const columns: TableProps<CategoryItem>['columns'] = [
     {title: '名称', dataIndex: 'name', key: 'name', align: 'center'},
     {title: '创建时间', dataIndex: 'create_time', key: 'create_time', align: 'center'},
     {title: '更新时间', dataIndex: 'update_time', key: 'update_time', align: 'center'},
-    {title: '描述', dataIndex: 'description', key: 'description', align: 'center'},
+    {title: '描述', dataIndex: 'description', key: 'description', align: 'center', width: '100px'},
     {title: '状态', dataIndex: 'online', key: 'online', align: 'center',
       render: (text) => <span>
         {text === ONLINE.ON ? <Tag color={'blue'}>在线</Tag> : <Tag color={'red'}>下线</Tag>}
@@ -98,16 +99,27 @@ export const Category = () => {
   const fetchCategoryList = (p = params) => {
     getPageCategory(p).then(res => {
       const {data} = res
-      const {items} = data
+      const {items, meta} = data
+      setMeta(meta)
       setCateList(items);
     })
+  }
+
+  const onChange = (n: number, s: number) => {
+    const p = {
+      ...params,
+      pageNo: n,
+      pageSize: s
+    }
+    setParams(p)
+    fetchCategoryList(p)
   }
 
   useEffect(() => {
     fetchCategoryList()
   }, []);
-  return <div className={'w-full h-full box-border flex flex-col'}>
+  return <div className={'page-container'}>
     <AdvancedForm<Partial<CategoryItem>> onFinish={onFinish} items={items} add={editAdd}/>
-    <AdvancedTable columns={columns} cateList={cateList} />
+    <AdvancedTable columns={columns} cateList={cateList} meta={meta} onChange={onChange}/>
   </div>
 }
